@@ -1,26 +1,22 @@
 import javax.swing.*;
 import java.awt.*;
-// import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.awt.font.TextAttribute;
-
-
 import net.sourceforge.jdatepicker.impl.*;
 
 public class TodoItem {
     private String text;
     private String priority;
-    private Date deadline; // Changed to Date type for easier handling
+    private Date deadline; 
     private String notes;
     private JPanel panel;
     private JCheckBox checkBox;
     private ToDoList parent;
     private JLabel priorityLabel;
-    // private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private JButton editButton;
     private JButton deleteButton;
     private JLabel remainingDaysLabel;
@@ -34,7 +30,7 @@ public class TodoItem {
         this.priority = priority;
         this.parent = parent;
         createPanel();
-        this.deadline = new Date(); // Default to current date
+        this.deadline = new Date(); 
         this.notes = "";
         this.completed = false;
         updateRemainingDays();
@@ -43,25 +39,22 @@ public class TodoItem {
     private void createPanel() {
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-    
         checkBox = new JCheckBox(text);
         checkBox.addActionListener(e -> {
             toggleCompleted();
             parent.updateUI();
         });
-    
+
         priorityLabel = new JLabel(priority);
         updatePriorityLabelStyle();
     
-        // Add components to the panel
         panel.add(checkBox);
         panel.add(Box.createRigidArea(new Dimension(5, 0)));
         panel.add(priorityLabel);
     
-        // This glue pushes everything after it to the right
         panel.add(Box.createHorizontalGlue());
     
-        // Add remaining days label here, it will be to the left of the buttons
+        
         remainingDaysLabel = new JLabel();
         updateRemainingDays();
         panel.add(remainingDaysLabel);
@@ -78,33 +71,12 @@ public class TodoItem {
         deleteButton.addActionListener(e -> confirmDeletion());
         panel.add(deleteButton);
     
-        // // Add deadline button
-        // deadlineButton = new JButton("Set Deadline");
-        // deadlineButton.addActionListener(e -> openDeadlinePicker());
-        // panel.add(deadlineButton);
     }
-
-    
-
-//     private void openDeadlinePicker() {
-//         UtilDateModel model = new UtilDateModel();
-//         if (deadline != null) {
-//             model.setDate(deadline.getYear() + 1900, deadline.getMonth(), deadline.getDate());
-//             model.setSelected(true);
-//         }
-//         JDatePanelImpl datePanel = new JDatePanelImpl(model);
-//         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
-
-//         int option = JOptionPane.showConfirmDialog(null, datePicker, "Set Deadline", JOptionPane.OK_CANCEL_OPTION);
-//         if (option == JOptionPane.OK_OPTION) {
-//             deadline = (Date) datePicker.getModel().getValue();
-//             updateRemainingDays();
-//     }
-// }
     
     
 
     void updateRemainingDays() {
+        //마감일 남은 날짜 계산 
         if (deadline == null) {
             remainingDaysLabel.setText("No Deadline");
             return;
@@ -124,6 +96,7 @@ public class TodoItem {
 
 
     private void editItem() {
+        //텍스트와 우선순위 변경가능한 대화상자 표시
         JTextField editText = new JTextField(text);
         JComboBox<String> editPriority = new JComboBox<>(new String[]{"Low", "Medium", "High"});
         editPriority.setSelectedItem(priority);
@@ -144,6 +117,7 @@ public class TodoItem {
     
 
     private void confirmDeletion() {
+        //삭제 확인하는 대화상자
         int response = JOptionPane.showConfirmDialog(
                 panel,
                 "Are you sure you want to delete this item?",
@@ -156,6 +130,7 @@ public class TodoItem {
     }
 
     private void openDetailWindow() {
+        //마강일와 세부메모 설정가능한 상세 창
         JFrame detailFrame = new JFrame("Set Deadline and Notes");
         detailFrame.setSize(400, 300);
         detailFrame.setLayout(new BorderLayout());
@@ -167,6 +142,7 @@ public class TodoItem {
             model.setDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
             model.setSelected(true);
         }
+
         JDatePanelImpl datePanel = new JDatePanelImpl(model);
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
     
@@ -190,6 +166,7 @@ public class TodoItem {
     
 
     private void updatePriorityLabelStyle() {
+        //우선순위에 따라 스타일 업데이트
         Font font = priorityLabel.getFont();
     float size = font.getSize2D();
 
@@ -211,6 +188,7 @@ public class TodoItem {
     
 
     private void toggleCompleted() {
+        // 체크박스 스타일
         Map<TextAttribute, Object> attributes = new HashMap<>(checkBox.getFont().getAttributes());
         if (checkBox.isSelected()) {
             attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
@@ -220,7 +198,6 @@ public class TodoItem {
         checkBox.setFont(new Font(attributes));
     }
 
-    
 
     public JPanel getPanel() {
         return panel;
@@ -230,13 +207,13 @@ public class TodoItem {
         return priority;
 
     }
-
     public void setDeadlineFromCalendarButton() {
+        //마감일 선택할 수 있는 달력 
         UtilDateModel model = new UtilDateModel();
-        if (deadline != null) {
-            model.setDate(deadline.getYear() + 1900, deadline.getMonth(), deadline.getDate());
-            model.setSelected(true);
-        }
+        // if (deadline != null) {
+        //     model.setDate(deadline.getYear() + 1900, deadline.getMonth(), deadline.getDate());
+        //     model.setSelected(true);
+        // }
         JDatePanelImpl datePanel = new JDatePanelImpl(model);
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
     
@@ -246,7 +223,7 @@ public class TodoItem {
             if (deadline != null) {
                 updateRemainingDays();
             } else {
-                remainingDaysLabel.setText(""); // Clear D-Day if no date is selected
+                remainingDaysLabel.setText("");  //미선택 도 가능
             }
         }
     }

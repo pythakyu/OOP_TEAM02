@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-// import java.util.Collections;
 import java.util.List;
 
 public class ToDoList extends JFrame {
@@ -13,8 +12,6 @@ public class ToDoList extends JFrame {
     public ToDoList() {
         todoItems = new ArrayList<>();
         createUI();
-
-        
     }
 
     private void createUI() {
@@ -51,14 +48,12 @@ public class ToDoList extends JFrame {
 
         addItemPanel.add(sortButton, BorderLayout.NORTH);
         
-
-
     }
-    private void sortByPriority() {
+
+    private void sortByPriority() { 
+        // 할 일 목록을 우선순위 따라 정렬
         List<TodoItem> selectedItems = new ArrayList<>();
         List<TodoItem> nonSelectedItems = new ArrayList<>();
-    
-        // Separate selected and non-selected items
         for (TodoItem item : todoItems) {
             if (item.getCheckBox().isSelected()) {
                 selectedItems.add(item);
@@ -67,16 +62,15 @@ public class ToDoList extends JFrame {
             }
         }
     
-        // Sort the non-selected items by priority
         nonSelectedItems.sort((item1, item2) -> {
             int priority1 = getPriorityValue(item1.getPriority());
             int priority2 = getPriorityValue(item2.getPriority());
-            return Integer.compare(priority2, priority1); // 내림차순 정렬
+            return Integer.compare(priority2, priority1);
+            //선택되지 않은 목록은 내림차순 정렬 
         });
     
-        // Combine selected and non-selected items with selected items at the bottom
         nonSelectedItems.addAll(selectedItems);
-    
+
         todoPanel.removeAll();
         nonSelectedItems.forEach(item -> todoPanel.add(item.getPanel()));
         updateUI();
@@ -84,6 +78,7 @@ public class ToDoList extends JFrame {
     
 
     private int getPriorityValue(String priority) {
+        //우선순위를 문자열로 변환
         switch (priority) {
             case "High":
                 return 3;
@@ -95,40 +90,21 @@ public class ToDoList extends JFrame {
                 return 0;
         }
     }
-    // private void addTodoItem(String text, String priority) {
-    //     if (text.isEmpty()) {
-    //         return;
-    //     }
-    //     TodoItem item = new TodoItem(text, priority, this);
-        
-    //     // Set the initial deadline for the new item
-    //     item.setDeadlineFromCalendarButton();
-        
-    //     todoItems.add(item);
-    //     todoPanel.add(item.getPanel());
-    //     updateUI();
-    // }
-
     
-
-
-
-
     private void addTodoItem(String text, String priority) {
         if (text.isEmpty()) {
         return;
     }
     TodoItem item = new TodoItem(text, priority, this);
     
-    // Set the initial deadline for the new item
     item.setDeadlineFromCalendarButton();
-    
+    //마감일 지정
     todoItems.add(item);
     todoPanel.add(item.getPanel());
     updateUI();
 
-        // 입력 필드 리셋
-        addItemField.setText("");
+    // 입력 필드 리셋
+     addItemField.setText("");
 
     }
 
@@ -141,7 +117,6 @@ public class ToDoList extends JFrame {
         todoItems.remove(item);
         todoPanel.remove(item.getPanel());
         updateUI();
-        // Update D-Day for all items
         for (TodoItem items : todoItems) {
             items.updateRemainingDays();
         }
