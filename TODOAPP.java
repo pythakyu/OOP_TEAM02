@@ -12,6 +12,12 @@ public class TODOAPP extends JFrame {
     private JTextField textField;
     private JComboBox<String> priorityComboBox;
 
+    private Color lightModeBackground = Color.WHITE;
+    private Color lightModeForeground = Color.BLACK;
+    private Color darkModeBackground = Color.DARK_GRAY;
+    private Color darkModeForeground = Color.WHITE;
+    private boolean isDarkMode = false;
+
     public TODOAPP() {
         setTitle("To-Do List");
         setSize(500, 400);
@@ -26,7 +32,7 @@ public class TODOAPP extends JFrame {
         JScrollPane scrollPane = new JScrollPane(list);
         add(scrollPane, BorderLayout.CENTER);
 
-        textField = new JTextField(20); // 설정된 크기
+        textField = new JTextField(20);
 
         String[] priorities = {"Low", "Medium", "High"};
         priorityComboBox = new JComboBox<>(priorities);
@@ -43,11 +49,33 @@ public class TODOAPP extends JFrame {
                 }
             }
         });
+        
+        /*textField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = textField.getText();
+                String priority = (String) priorityComboBox.getSelectedItem();
+                if (!text.isEmpty() && priority != null) {
+                    listModel.addElement(new ToDoItem(text, priority, new Date(), false));
+                    textField.setText("");
+                }
+            }
+        });*/
+
+        JButton changeThemeButton = new JButton("Change Theme");
+        changeThemeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isDarkMode = !isDarkMode;
+                changeTheme();
+            }
+        });
 
         JPanel inputPanel = new JPanel();
         inputPanel.add(textField);
         inputPanel.add(priorityComboBox);
         inputPanel.add(addButton);
+        inputPanel.add(changeThemeButton);
         add(inputPanel, BorderLayout.SOUTH);
 
         list.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -60,6 +88,27 @@ public class TODOAPP extends JFrame {
         });
 
         setVisible(true);
+    }
+    
+
+    private void changeTheme() {
+        if (isDarkMode) {
+            list.setBackground(darkModeBackground);
+            list.setForeground(darkModeForeground);
+            textField.setBackground(darkModeBackground);
+            textField.setForeground(darkModeForeground);
+            priorityComboBox.setBackground(darkModeBackground);
+            priorityComboBox.setForeground(darkModeForeground);
+        } else {
+            list.setBackground(lightModeBackground);
+            list.setForeground(lightModeForeground);
+            textField.setBackground(lightModeBackground);
+            textField.setForeground(lightModeForeground);
+            priorityComboBox.setBackground(lightModeBackground);
+            priorityComboBox.setForeground(lightModeForeground);
+        }
+        getContentPane().setBackground(isDarkMode ? darkModeBackground : lightModeBackground);
+        repaint();
     }
 
     public static void main(String[] args) {
@@ -109,7 +158,7 @@ public class TODOAPP extends JFrame {
         }
     }
 
-    private static class ToDoItemRenderer extends JPanel implements ListCellRenderer<ToDoItem> {
+    private class ToDoItemRenderer extends JPanel implements ListCellRenderer<ToDoItem> {
         private JCheckBox checkBox;
         private JLabel infoLabel;
 
@@ -129,9 +178,27 @@ public class TODOAPP extends JFrame {
             if (value.isDone()) {
                 text = "<html><strike>" + text + "</strike></html>";
             }
-            infoLabel.setText("<html>" + text + "<br><small>Priority: " + value.getPriority() + 
-                              "<br>Date: " + value.getFormattedCreationDate() + "</small></html>");
+            infoLabel.setText("<html>" + text + "<br><small>Priority: " + value.getPriority() +
+                    "<br>Date: " + value.getFormattedCreationDate() + "</small></html>");
+            
+            if (isDarkMode) {
+                setBackground(darkModeBackground);
+                setForeground(darkModeForeground);
+                checkBox.setBackground(darkModeBackground);
+                checkBox.setForeground(darkModeForeground);
+                infoLabel.setBackground(darkModeBackground);
+                infoLabel.setForeground(darkModeForeground);
+            } else {
+                setBackground(lightModeBackground);
+                setForeground(lightModeForeground);
+                checkBox.setBackground(lightModeBackground);
+                checkBox.setForeground(lightModeForeground);
+                infoLabel.setBackground(lightModeBackground);
+                infoLabel.setForeground(lightModeForeground);
+            }
+            
             return this;
+            
         }
     }
 }
