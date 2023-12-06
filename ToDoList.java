@@ -85,8 +85,9 @@ public class ToDoList extends JFrame {
         if (result == JFileChooser.APPROVE_OPTION) {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileChooser.getSelectedFile()))) {
                 for (TodoItem item : todoItems) {
-                    writer.write("내용: " + item.getText() + "\n중요도: " + item.getPriority() +
-                             "\n완료여부: " + item.isDone() + "\n\n");
+                    writer.write("\n내용: " + item.getText() + "\n중요도: " + item.getPriority() + "\n메모: " + item.getNote() + 
+                    		"\n날짜: " + item.getFormattedCreationDate() + "\n완료: " + item.isDone() + "\n\n"
+                    		+ "===========================================\n");
                 }
                 JOptionPane.showMessageDialog(this, "성공적으로 저장하였습니다.");
             } catch (IOException ex) {

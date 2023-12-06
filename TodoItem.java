@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.awt.font.TextAttribute;
 import net.sourceforge.jdatepicker.impl.*;
+import java.text.SimpleDateFormat;
 
 public class TodoItem {
     private String text;
@@ -24,6 +25,7 @@ public class TodoItem {
     private JLabel remainingDaysLabel;
     private JButton deadlineButton;
     private boolean completed; // 체크박스의 상태를 저장하는 변수
+    private Date creationDate;
     
     
     public TodoItem(String text, String priority, ToDoList parent) {
@@ -34,6 +36,7 @@ public class TodoItem {
         this.deadline = new Date(); 
         this.notes = "";
         this.completed = false;
+        this.creationDate = new Date();
         updateRemainingDays();
     }
 
@@ -73,7 +76,9 @@ public class TodoItem {
     
     }
     
-    
+    public Date getCreationDate() {
+        return creationDate;
+    }
 
     void updateRemainingDays() {
         //마감일 남은 날짜 계산 
@@ -81,16 +86,31 @@ public class TodoItem {
             remainingDaysLabel.setText("No Deadline");
             return;
         }
-
-        long diff = deadline.getTime() - System.currentTimeMillis() ;
+    
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        today.set(Calendar.MINUTE, 0);
+        today.set(Calendar.SECOND, 0);
+        today.set(Calendar.MILLISECOND, 0);
+    
+        Calendar deadlineCalendar = Calendar.getInstance();
+        deadlineCalendar.setTime(deadline);
+        deadlineCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        deadlineCalendar.set(Calendar.MINUTE, 0);
+        deadlineCalendar.set(Calendar.SECOND, 0);
+        deadlineCalendar.set(Calendar.MILLISECOND, 0);
+    
+        long diff = deadlineCalendar.getTimeInMillis() - today.getTimeInMillis();
         long days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-
-        if (days < 0) {
+    
+        days++;
+    
+        if (days <= 0) {
             remainingDaysLabel.setText("Overdue");
-        } else if (days == 0) {
+        } else if (days == 1) {
             remainingDaysLabel.setText("D-Day");
         } else {
-            remainingDaysLabel.setText(" D-" + days+ "  ");
+            remainingDaysLabel.setText(" D-" + (days - 1) + "  ");
         }
     }
 
@@ -192,8 +212,10 @@ public class TodoItem {
         Map<TextAttribute, Object> attributes = new HashMap<>(checkBox.getFont().getAttributes());
         if (checkBox.isSelected()) {
             attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+            completed = true;
         } else {
             attributes.remove(TextAttribute.STRIKETHROUGH);
+            completed = false;
         }
         checkBox.setFont(new Font(attributes));
         parent.updateProgressBar();
@@ -224,13 +246,17 @@ public class TodoItem {
         return text;
     }
 
-    public boolean isDone() {
-    	return completed;
+    public String isDone() {
+        return completed ? "O" : "X";
     }
 
    public Date getDeadline() {
 	   return deadline;
    }
+   
+  public String getNote() {
+	  return notes;
+  }
    
     public void setDeadlineFromCalendarButton() {
         //마감일 선택할 수 있는 달력 
@@ -254,7 +280,8 @@ public class TodoItem {
     }
 
     public String getFormattedCreationDate() {
-        return "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(creationDate);
     }
     
     
