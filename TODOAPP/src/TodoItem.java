@@ -12,19 +12,19 @@ import java.text.SimpleDateFormat;
 
 public class TodoItem {
 	
+	
 	// 할 일 항목의 텍스트, 우선순위, 마감일, 메모를 저장하는 변수
     private String text;
     private String priority;
     private Date deadline; 
     private String notes;
+    private TodoListEdit editor;
     
     // UI 관련 변수
     private JPanel panel;
     private JCheckBox checkBox;
     private ToDoList parent;
     private JLabel priorityLabel;
-    private JButton editButton;
-    private JButton deleteButton;
     private JLabel remainingDaysLabel;
     private JButton deadlineButton;
     private boolean completed; // 체크박스의 상태를 저장하는 변수
@@ -41,6 +41,7 @@ public class TodoItem {
         this.completed = false;              // 완료 상태를 false로 초기화
         this.creationDate = new Date();      // 생성 날짜를 현재 날짜
         updateRemainingDays();               // 남은 일수를 업데이트
+        editor = new TodoListEdit(this);
     }
     
 
@@ -76,15 +77,6 @@ public class TodoItem {
         JButton detailButton = new JButton("+");
         detailButton.addActionListener(e -> openDetailWindow());
         panel.add(detailButton);
-    
-        editButton = new JButton("Edit");
-        editButton.addActionListener(e -> editItem());
-        panel.add(editButton);
-    
-        deleteButton = new JButton("Delete");
-        deleteButton.addActionListener(e -> confirmDeletion());
-        panel.add(deleteButton);
-    
     }
     
     // 할 일 항목의 생성 날짜 반환
@@ -131,9 +123,8 @@ public class TodoItem {
             remainingDaysLabel.setText(" D-" + (days - 1) + "  ");
         }
     }
-
-
-    private void editItem() {
+    
+    public void editItem() {
         //텍스트와 우선순위 변경가능한 대화상자 표시
         JTextField editText = new JTextField(text);
         JComboBox<String> editPriority = new JComboBox<>(new String[]{"Low", "Medium", "High"});
@@ -152,9 +143,8 @@ public class TodoItem {
             parent.updateUI();
         }
     }
-    
 
-    private void confirmDeletion() {
+    public void confirmDeletion() {
         //삭제 확인하는 대화상자
         int response = JOptionPane.showConfirmDialog(
                 panel,
@@ -246,7 +236,7 @@ public class TodoItem {
 
     // 할 일 항목을 나타내는 패널을 반환
     public JPanel getPanel() {
-        return panel;
+        return this.panel;
     }
 
     // 우선순위에 따른 한글 텍스트 반환
@@ -317,6 +307,5 @@ public class TodoItem {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(creationDate);
     }
-    
     
 }

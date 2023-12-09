@@ -172,22 +172,8 @@ public class ToDoList extends JFrame {
 
     // 할 일 목록을 파일로 저장하는 메소드
     private void saveToFile() {
-        JFileChooser fileChooser = new JFileChooser(); //디렉토리 선
-        int result = fileChooser.showSaveDialog(this);
-
-        if (result == JFileChooser.APPROVE_OPTION) {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileChooser.getSelectedFile()))) {
-                for (TodoItem item : todoItems) {
-                	writer.write("\n내용: " + item.getText() + "\n중요도: " + item.getPriority() + "\n메모: " + item.getNote() + 
-                    		"\n날짜: " + item.getFormattedCreationDate() + "\n완료: " + item.isDone() + "\n\n"
-                    		+ "===========================================\n");
-                }
-                JOptionPane.showMessageDialog(this, "성공적으로 저장하였습니다.");
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "저장에 실패하였습니다.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+        TodoListSave todoListSave = new TodoListSave(this, todoItems);
+        todoListSave.saveToFile();
         updateProgressBar();
     }
     
