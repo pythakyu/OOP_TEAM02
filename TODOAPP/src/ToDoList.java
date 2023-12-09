@@ -30,7 +30,7 @@ public class ToDoList extends JFrame {
 
     public ToDoList() {
         todoItems = new ArrayList<>();     // 할 일 아이템 리스트 초기화
-        createUI();                         // UI 생성 메소드 호출
+        createUI();                        // UI 생성 메소드 호출
     }
 
     private void createUI() {
@@ -129,21 +129,42 @@ public class ToDoList extends JFrame {
     
     // 다크모드와 라이트모드를 전환하는 메소드
     private void changeTheme() {
-        if (isDarkMode) {
+    	
+    	if (isDarkMode) {
             todoPanel.setBackground(darkModeBackground);
             todoPanel.setForeground(darkModeForeground);
-            addItemField.setBackground(darkModeBackground);
-            addItemField.setForeground(darkModeForeground);
-            priorityComboBox.setBackground(darkModeBackground);
-            priorityComboBox.setForeground(darkModeForeground);
+            //addItemField.setBackground(darkModeBackground);
+            //addItemField.setForeground(darkModeForeground);
+            //priorityComboBox.setBackground(darkModeBackground);
+            //priorityComboBox.setForeground(darkModeForeground);
         } else {
             todoPanel.setBackground(lightModeBackground);
             todoPanel.setForeground(lightModeForeground);
-            addItemField.setBackground(lightModeBackground);
-            addItemField.setForeground(lightModeForeground);
-            priorityComboBox.setBackground(lightModeBackground);
-            priorityComboBox.setForeground(lightModeForeground);
+            //addItemField.setBackground(lightModeBackground);
+            //addItemField.setForeground(lightModeForeground);
+            //priorityComboBox.setBackground(lightModeBackground);
+            //priorityComboBox.setForeground(lightModeForeground);
         }
+    	for (TodoItem item : todoItems) {
+    		JCheckBox checkBox = item.getCheckBox();
+    	    JLabel priorityLabel = item.getPriorityLabel();
+    	    JPanel panel = item.getPanel();
+
+    	    if (isDarkMode) {
+    	        checkBox.setBackground(darkModeBackground);
+    	        checkBox.setForeground(darkModeForeground);
+    	        priorityLabel.setOpaque(true);
+    	        priorityLabel.setBackground(darkModeBackground);
+    	        panel.setBackground(darkModeBackground);
+    	    } else {
+    	        checkBox.setBackground(lightModeBackground);
+    	        checkBox.setForeground(lightModeForeground);
+    	        priorityLabel.setOpaque(true);
+    	        priorityLabel.setBackground(lightModeBackground);
+    	        panel.setBackground(lightModeBackground);
+    	    }  
+    	}
+    	
         // 프레임의 배경색을 현재 모드의 배경색으로 변경하고, 변경된 색상이 화면에 바로 반영되도록 repaint 메소드 호출
         getContentPane().setBackground(isDarkMode ? darkModeBackground : lightModeBackground);
         repaint();
@@ -232,6 +253,31 @@ public class ToDoList extends JFrame {
     //마감일 지정
     todoItems.add(item);
     todoPanel.add(item.getPanel());
+    
+    JCheckBox checkBox = item.getCheckBox();
+    JLabel priorityLabel = item.getPriorityLabel();
+    JPanel panel = item.getPanel();
+
+    // 현재 모드에 따라 배경색과 글자색 설정
+    if (isDarkMode) {
+        checkBox.setBackground(darkModeBackground);
+        checkBox.setForeground(darkModeForeground);
+        priorityLabel.setOpaque(true);
+        priorityLabel.setBackground(darkModeBackground);
+        panel.setBackground(darkModeBackground);
+        panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+    } else {
+        checkBox.setBackground(lightModeBackground);
+        checkBox.setForeground(lightModeForeground);
+        priorityLabel.setOpaque(true);
+        priorityLabel.setBackground(lightModeBackground);
+        panel.setBackground(lightModeBackground);
+        panel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+    }
+
+    // 체크리스트 항목을 리스트에 추가하고 UI 업데이트
+    todoItems.add(item);
+    
     updateUI();
 
     // 입력 필드 리셋
