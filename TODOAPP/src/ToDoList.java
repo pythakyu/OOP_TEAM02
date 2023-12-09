@@ -129,19 +129,18 @@ public class ToDoList extends JFrame {
     
     // 다크모드와 라이트모드를 전환하는 메소드
     private void changeTheme() {
-    	
     	if (isDarkMode) {
             todoPanel.setBackground(darkModeBackground);
             todoPanel.setForeground(darkModeForeground);
-            //addItemField.setBackground(darkModeBackground);
-            //addItemField.setForeground(darkModeForeground);
+            addItemField.setBackground(darkModeBackground);
+            addItemField.setForeground(darkModeForeground);
             //priorityComboBox.setBackground(darkModeBackground);
             //priorityComboBox.setForeground(darkModeForeground);
         } else {
             todoPanel.setBackground(lightModeBackground);
             todoPanel.setForeground(lightModeForeground);
-            //addItemField.setBackground(lightModeBackground);
-            //addItemField.setForeground(lightModeForeground);
+            addItemField.setBackground(lightModeBackground);
+            addItemField.setForeground(lightModeForeground);
             //priorityComboBox.setBackground(lightModeBackground);
             //priorityComboBox.setForeground(lightModeForeground);
         }
@@ -164,7 +163,7 @@ public class ToDoList extends JFrame {
     	        panel.setBackground(lightModeBackground);
     	    }  
     	}
-    	
+        
         // 프레임의 배경색을 현재 모드의 배경색으로 변경하고, 변경된 색상이 화면에 바로 반영되도록 repaint 메소드 호출
         getContentPane().setBackground(isDarkMode ? darkModeBackground : lightModeBackground);
         repaint();

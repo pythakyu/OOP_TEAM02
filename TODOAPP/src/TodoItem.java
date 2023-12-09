@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 
 public class TodoItem {
 	
-	
 	// 할 일 항목의 텍스트, 우선순위, 마감일, 메모를 저장하는 변수
     private String text;
     private String priority;
