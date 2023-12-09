@@ -134,15 +134,15 @@ public class ToDoList extends JFrame {
             todoPanel.setForeground(darkModeForeground);
             addItemField.setBackground(darkModeBackground);
             addItemField.setForeground(darkModeForeground);
-            //priorityComboBox.setBackground(darkModeBackground);
-            //priorityComboBox.setForeground(darkModeForeground);
+            priorityComboBox.setBackground(darkModeBackground);
+            priorityComboBox.setForeground(darkModeForeground);
         } else {
             todoPanel.setBackground(lightModeBackground);
             todoPanel.setForeground(lightModeForeground);
             addItemField.setBackground(lightModeBackground);
             addItemField.setForeground(lightModeForeground);
-            //priorityComboBox.setBackground(lightModeBackground);
-            //priorityComboBox.setForeground(lightModeForeground);
+            priorityComboBox.setBackground(lightModeBackground);
+            priorityComboBox.setForeground(lightModeForeground);
         }
     	for (TodoItem item : todoItems) {
     		JCheckBox checkBox = item.getCheckBox();
